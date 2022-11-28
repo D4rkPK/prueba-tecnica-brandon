@@ -12,11 +12,6 @@ const routes = [
     name: 'game',
     component: () => import(/* webpackChunkName: "about" */ '../views/Game/GameView.vue')
   },
-  {
-    path: '/endGame',
-    name: 'endGame',
-    component: () => import(/* webpackChunkName: "about" */ '../views/EndGame/EndGameView.vue')
-  }
 ]
 
 const router = createRouter({
