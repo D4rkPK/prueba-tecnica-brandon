@@ -1,7 +1,6 @@
 <template>
   <div class="game">
     <div class="game__items">
-      <TimeBar />
       <GameLogic
         v-if="!this.$store.state.endGame"
         :sendCheckAnswer="CheckAnswer"
@@ -39,14 +38,12 @@
 <script>
 import GameLogic from "@/components/GameArea.vue";
 import EndGame from "@/components/GameOver.vue";
-import TimeBar from "@/components/TimeBar.vue";
 
 export default {
   name: "GameView",
   components: {
     GameLogic,
     EndGame,
-    TimeBar,
   },
   data() {
     return {

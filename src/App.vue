@@ -19,6 +19,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body{
+  background-color: #fafafa;
+}
+
 :root {
   /* colors */
   --color-grey: #495259;

@@ -4,7 +4,7 @@
     <div
       class="progress-bar"
       role="progressbar"
-      :style="{ width: progress + '%' }"
+      :style="{ width: Progress + '%' }"
       aria-valuenow="25"
       aria-valuemin="0"
       aria-valuemax="100"
@@ -17,28 +17,34 @@ export default {
   name: "TimeBar",
   data() {
     return {
-      progress: 0,
+      Progress: 0,
+      Time: 0,
     };
   },
 
+  props: ["setTimeOut"],
+
   created() {
-    console.log("created", this.$store.state.timeOut);
-    if (this.$store.state.timeOut === false) {
-      console.log("entro", this.$store.state.timeOut);
-      setInterval(() => {
-        this.progress += 10;
-        if (this.progress >= 100) {
-          this.progress = 0;
-          this.$store.commit("TimeOut", true);
-          console.log("time out", this.$store.state.timeOut);
-        }
-      }, 1000);
-    }
+    this.Time = this.setTimeOut;
   },
 
-  watch: {
-    progress: function (val) {
-      this.Progress = val;
+  watch: {},
+
+  methods: {
+    start() {
+      this.Progress = 0;
+      this.Time = this.setTimeOut;
+      this.timer = setInterval(() => {
+        this.Progress += 100 / this.Time;
+        this.Time--;
+        if (this.Time < 0) {
+          clearInterval(this.timer);
+          this.$emit("timeOut");
+        }
+      }, 1000);
+    },
+    stop() {
+      clearInterval(this.timer);
     },
   },
 };
@@ -54,7 +60,7 @@ export default {
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #FF8001 0%, #FFCC0D 100%);
+  background: linear-gradient(90deg, #ff8001 0%, #ffcc0d 100%);
   border-radius: 5px;
   text-align: center;
   line-height: 20px;

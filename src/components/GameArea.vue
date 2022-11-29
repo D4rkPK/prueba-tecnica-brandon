@@ -1,5 +1,9 @@
 <template>
+  <div class="timeBar">
+    <TimeBar :setTimeOut="timeOut" @timeOut="timeOutHandler" />
+  </div>
   <div class="game__board">
+    
     <div class="game__board__row">
       <!-- title -->
       <h1 class="game__board__row__title">Completa la secuencia</h1>
@@ -62,13 +66,17 @@
 
 <script>
 import _ from "lodash";
+import TimeBar from "./TimeBar.vue";
 
 export default {
   name: "GameLogic",
+  components: {
+    TimeBar,
+  },
   data() {
     return {
       round: 1,
-      answer: "_",
+      answer: "",
 
       items: [],
       correctAnswer: [],
@@ -112,7 +120,7 @@ export default {
       /* hacer hasta que round sea igual a 5 */
       if (this.round < 5) {
         this.round++;
-        this.answer = "_";
+        this.answer = "";
         //this.statusQuestion = null;
         this.generateItems();
       } else {
