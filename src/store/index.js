@@ -5,6 +5,7 @@ export default createStore({
     endGame: false,
     score: 0,
     rounds: 0,
+    timeOut: false,
   },
   getters: {
   },
@@ -17,7 +18,13 @@ export default createStore({
     },
     Rounds(state, payload) {
       state.rounds = payload;
-    }
+    },
+
+    TimeOut(state, payload) {
+      state.timeOut = payload;
+    },
+
+
   },
   actions: {
   },

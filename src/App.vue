@@ -1,30 +1,42 @@
 <template>
-  <nav>
+<!--   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/game">About</router-link>
-  </nav>
-  <router-view/>
+  </nav> -->
+  <router-view />
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<style lang="css">
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-nav {
-  padding: 30px;
+html {
+  font-size: 62.5%;
+  font-family: var(--font-family-montserrat);
+  scroll-behavior: smooth;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+:root {
+  /* colors */
+  --color-grey: #495259;
+  --color-steelblue: #2b4457;
+  --color-lightsteel-blue: #91a9bc;
+  --color-mediumAquamarine: #00987e;
+  --color-turquoise: #52e1c9;
+  --color-fireBrick: #b60006;
+  --color-lightCoral: #ff7c80;
+  --color-azure: #ed2a2f;
+  --color-steel: #6a7680;
+  --color-white: #fff;
+  --color-black: #000000;
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+  /* fonts */
+  --font-family-montserrat: "Montserrat", sans-serif;
+  --font-size: 1rem;
+  --font-weight: 600;
+  --font-weight-bold: 700;
 }
 </style>

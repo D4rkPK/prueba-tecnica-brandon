@@ -22,12 +22,18 @@ export default {
   },
 
   created() {
-    setInterval(() => {
-      this.progress += 10;
-      if (this.progress >= 100) {
-        this.progress = 0;
-      }
-    }, 1000);
+    console.log("created", this.$store.state.timeOut);
+    if (this.$store.state.timeOut === false) {
+      console.log("entro", this.$store.state.timeOut);
+      setInterval(() => {
+        this.progress += 10;
+        if (this.progress >= 100) {
+          this.progress = 0;
+          this.$store.commit("TimeOut", true);
+          console.log("time out", this.$store.state.timeOut);
+        }
+      }, 1000);
+    }
   },
 
   watch: {
@@ -35,24 +41,23 @@ export default {
       this.Progress = val;
     },
   },
-
 };
 </script>
 <style scoped>
-.progress{
-    width: 100%;
-    height: 20px;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    margin: 10px 0;
+.progress {
+  width: 100%;
+  height: 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  margin: 10px 0;
 }
 
-.progress-bar{
-    height: 100%;
-    background-color: #4CAF50;
-    border-radius: 5px;
-    text-align: center;
-    line-height: 20px;
-    color: white;
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #FF8001 0%, #FFCC0D 100%);
+  border-radius: 5px;
+  text-align: center;
+  line-height: 20px;
+  color: white;
 }
 </style>
