@@ -13,10 +13,13 @@
             alt="union"
           />
           <div>
-            <div v-if="item != '?' && item != answer">
+
+            <!-- res -->
+            <div v-if="item != '?'">
               <span>{{ item }}</span>
             </div>
-            <div v-if="item == answer">
+            <!-- v-if index donde este ? -->
+            <div v-if="item == '?'">
               <div
                 class="game__board__row__item__answer --correct"
                 v-if="statusQuestion.status === 'correct'"
@@ -34,7 +37,7 @@
               </div>
             </div>
 
-            <div class="game__board__row__item__answer" v-if="item == '?'">
+            <div class="game__board__row__item__answer" v-if="item == '?' && statusQuestion.status == null">
               <span>{{ answer }}</span>
 
               <div class="game__board__row__item__answer__buttons">
@@ -117,6 +120,7 @@ export default {
         this.$store.commit("Score", this.score);
         this.$store.commit("Rounds", this.round);
       }
+      this.statusQuestion.status = null;
       this.$emit("sendNextQuestionBreak", false);
     },
 
@@ -159,18 +163,28 @@ export default {
     checkAnswer() {
       console.log("checkAnswer");
       /* remplazar valor ? de items por answer */
-      const index = this.items.indexOf("?");
-      this.items[index] = parseInt(this.answer);
+
+      let newArray = Object.assign([], this.items);
+      console.log("newArray", newArray);
+      const index = newArray.indexOf("?");
+      console.log("index newArray", index);
+      newArray[index] = parseInt(this.answer);
+      console.log("newArray2", newArray);
+
+      //const index = this.items.indexOf("?");
+      //this.items[index] = parseInt(this.answer);
 
       console.log(this.items, "items");
+      console.log(newArray, "newArray");
       console.log(this.correctAnswer, "correctAnswer");
 
       /* comparar arrays */
-      const isEqual = _.isEqual(this.items, this.correctAnswer);
+      const isEqual = _.isEqual(newArray, this.correctAnswer);
       let result = null;
       if (isEqual) {
         this.score += 1;
         result = { result: "correct", status: "correct" };
+        console.log("correct");
       } else {
         result = {
           result:
@@ -178,19 +192,18 @@ export default {
             this.correctAnswer[this.index],
           status: "incorrect",
         };
+        console.log("incorrect");
       }
       this.$emit("sendCheckAnswerBreak", false);
       return (this.resultQuestion = result);
     },
 
     /* se acabo el tiempo, respuesta incorrecta */
-    timeOut() {
+    /* timeOut() {
       return (this.resultQuestion =
         "El tiempo se acabo, la respuesta correcta es: " +
         this.correctAnswer[this.index]);
-    },
-
-    /* reiniciar juego */
+    }, */
   },
 };
 </script>
