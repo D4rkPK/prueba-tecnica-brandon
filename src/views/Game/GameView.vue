@@ -65,12 +65,10 @@ export default {
     CheckAnswerBreak() {
       this.CheckAnswer = false;
       this.answered = true;
-      this.$store.commit("TimeOut", false);
     },
     NextQuestionBreak() {
       this.NextQuestion = false;
       this.answered = false;
-      this.$store.commit("TimeOut", false);
     },
   },
 };

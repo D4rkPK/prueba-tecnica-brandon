@@ -1,7 +1,7 @@
 <template>
   <div class="timeBar">
     <TimeBar
-      :setTimeOut="10"
+      :setTimeOut="1000"
       :timerStatus="timerStatus"
       @setTimeOutBreak="checkAnswer"
     />
@@ -50,7 +50,9 @@
                 <div class="game__area__row__items__answer__buttons">
                   <div class="game__area__row__items__answer__buttons__button">
                     <button
-                      class="game__area__row__items__answer__buttons__button__item"
+                      class="
+                        game__area__row__items__answer__buttons__button__item
+                      "
                       v-for="selection in selections"
                       :key="selection.id"
                       v-on:click="answer = selection"
@@ -88,10 +90,7 @@ export default {
       progress: 0,
       index: 0,
       score: 0,
-      gameType: null, //pend
-
       timerStatus: false,
-
       resultQuestion: [],
     };
   },
@@ -117,7 +116,10 @@ export default {
   },
 
   async created() {
-    await this.generateItems();
+    console.log("created", this.$store.state.difficulty);
+    /* log emit difficulty */
+    console.log(this.$emit('difficulty'), "emit difficulty");
+    await this.generateItems(this.$store.state.difficulty);
     this.timerStatus = true;
   },
 
@@ -128,7 +130,7 @@ export default {
       if (this.round < 5) {
         this.round++;
         this.answer = null;
-        this.generateItems();
+        this.generateItems(this.$store.state.difficulty);
         this.timerStatus = true;
       } else {
         this.$store.commit("EndGame", true);
@@ -139,30 +141,37 @@ export default {
       this.$emit("sendNextQuestionBreak", false);
     },
 
-    async generateItems() {
-
-/*       if(this.gameType == 3){
-        let random = Math.floor(Math.random() * 92) + 1;
-        const primeNumbers = _.filter(_.range(random, random + 7), (num) => {
-        for (let i = 2; i < num; i++) {
-          if (num % i === 0) {
-            return false;
-          }
+    /* verificar si son primos */
+    isPrime(num) {
+      for (let i = 2; i < num; i++) {
+        if (num % i === 0) {
+          return false;
         }
-        return num !== 1;
-      });
-      } */
+      }
+      return num > 1;
+    },
 
-
-
-      let random = Math.floor(Math.random() * 3) + 1;
-
-      /* genera un array con el numero random de items */
-      const items = _.sortBy(_.range(random, random + 7));
-
-
-      
-      
+    async generateItems(gameType) {
+      console.log(gameType, "gameType");
+      let items = [];
+      if (gameType == 1 || gameType == 2) {
+        let random = Math.floor(Math.random() * 3) + 1;
+        /* genera un array con el numero random de items */
+        items = _.sortBy(_.range(random, random + 7));
+      } else if (gameType == 3) {
+        /* genera un numero random maximo a 67, para dejar 7 posibilidades hasta el 97 */
+        let random = Math.floor(Math.random() * 67) + 1;
+        let primeNumbers = [];
+        let number = random;
+        while (primeNumbers.length < 7) {
+          if (this.isPrime(number)) {
+            primeNumbers.push(number);
+          }
+          number++;
+        }
+        items = primeNumbers;
+        console.log(items, "primeNumbers");
+      }
 
       this.correctAnswer = Object.assign([], items);
       console.log("correctAnswer", this.correctAnswer);
@@ -189,6 +198,16 @@ export default {
           randomIndex - 1,
           randomIndex + 2
         );
+      }
+
+      if(gameType != 1){
+        /* sumar numeros random al inicio y al final */
+        this.selections[0] = this.selections[0] + Math.floor(Math.random() * 10) + 1;
+        this.selections[2] = this.selections[2] + Math.floor(Math.random() * 10) + 1;
+
+        /* mezclar selections */
+        this.selections = _.shuffle(this.selections);
+        
       }
       console.log(this.selections, "selections");
     },
@@ -469,6 +488,14 @@ export default {
 
 /* breakpoint pantalla menor de 650px */
 @media (max-width: 650px) {
+
+  .game__area__row {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+
+    
+  }
   .game__area__row__items {
     font-size: 3rem;
   }
@@ -477,8 +504,10 @@ export default {
     width: 3rem;
   }
 
+
   .game__area__row__container {
-    max-width: 300px;
+    grid-template-columns: repeat(7, 1fr);
+    width: 270px;
     margin-left: -40px;
   }
 
@@ -515,31 +544,31 @@ export default {
   }
 
   .game__area__row__items__answer__buttons__button {
-  margin-top: 8rem;
-  gap: 0.5rem;
-  background-color: var(--color-lightsteel-blue);
-  border: 0.5rem solid var(--color-lightsteel-blue);
-  border-radius: 0.97rem;
-  box-shadow: 0px 7.7335px 7.7335px #b4d8f4;
-}
+    margin-top: 8rem;
+    gap: 0.5rem;
+    background-color: var(--color-lightsteel-blue);
+    border: 0.5rem solid var(--color-lightsteel-blue);
+    border-radius: 0.97rem;
+    box-shadow: 0px 7.7335px 7.7335px #b4d8f4;
+  }
 
-.game__area__row__items__answer__buttons__button__item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  padding: 1.2rem;
-  border: 1px solid var(--color-lightsteel-blue);
-  border-radius: 0.436rem;
-  font-size: 3rem;
-  font-weight: var(--font-weight);
-  color: var(--color-steelblue);
-}
+  .game__area__row__items__answer__buttons__button__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 1.2rem;
+    border: 1px solid var(--color-lightsteel-blue);
+    border-radius: 0.436rem;
+    font-size: 3rem;
+    font-weight: var(--font-weight);
+    color: var(--color-steelblue);
+  }
 
-.game__area__row__items__answer__buttons__button__item:hover {
-  transform: scale(1.1);
-  cursor: pointer;
-}
+  .game__area__row__items__answer__buttons__button__item:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
 }
 </style>

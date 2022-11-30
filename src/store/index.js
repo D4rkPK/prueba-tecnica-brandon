@@ -5,8 +5,7 @@ export default createStore({
     endGame: false,
     score: 0,
     rounds: 0,
-  },
-  getters: {
+    difficulty: 0,
   },
   mutations: {
     EndGame(state, payload) {
@@ -18,6 +17,9 @@ export default createStore({
     Rounds(state, payload) {
       state.rounds = payload;
     },
+    Difficulty(state, payload) {
+      state.difficulty = payload;
+    }
   },
   actions: {
   },

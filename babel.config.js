@@ -7,6 +7,7 @@ module.exports = function (api, plugins) {
   const presets = [
     '@vue/cli-plugin-babel/preset'
   ];
+  /* Remueve los consoleLog en produccion */
   plugins = removeConsolePlugin,
   api.cache(false)
 

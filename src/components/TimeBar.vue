@@ -23,18 +23,14 @@ export default {
       interval: null,
     };
   },
-
   props: ["setTimeOut", "timerStatus"],
-
   created() {
     this.SetTimeOut = this.setTimeOut;
   },
-
   watch: {
     setTimeOut: function (val) {
       this.SetTimeOut = val;
     },
-
     timerStatus: function (val) {
       if (val) {
         this.start();
@@ -43,20 +39,18 @@ export default {
       }
     },
   },
-
   methods: {
     start() {
-      console.log("start");
+      this.Progress = 0;
       this.interval = setInterval(() => {
-        this.Progress += 0.1;
+        this.Progress += 100 / 1000;
         if (this.Progress >= 100 || this.TimerStatus != false) {
           console.log("time out");
           this.$emit("setTimeOutBreak", true);
           clearInterval(this.interval);
         }
-      }, 0);
+      }, this.SetTimeOut / 100);
     },
-
     stop() {
       this.Progress = 0;
       clearInterval(this.interval);
@@ -70,7 +64,6 @@ export default {
   height: 2rem;
   margin-bottom: 3rem;
 }
-
 .progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #ff8001 0%, #ffcc0d 100%);

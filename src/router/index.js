@@ -12,13 +12,12 @@ const routes = [
     name: 'game',
     component: () => import('../views/Game/GameView.vue')
   },
-
   /* 404 */
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('../views/errors/NotFoundView.vue')
-  }
+  },
 ]
 
 const router = createRouter({
