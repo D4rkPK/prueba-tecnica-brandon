@@ -1,65 +1,69 @@
 <template>
   <div class="timeBar">
-    <TimeBar :setTimeOut="timeOut" @timeOut="timeOutHandler" />
+    <TimeBar
+      :setTimeOut="10"
+      :timerStatus="timerStatus"
+      @setTimeOutBreak="checkAnswer"
+    />
   </div>
-  <div class="game__board">
-    
-    <div class="game__board__row">
+  <div class="game__area">
+    <div class="game__area__row">
       <!-- title -->
-      <h1 class="game__board__row__title">Completa la secuencia</h1>
-      <!-- form  -->
-      <form class="game__board__row__form">
-        <div class="game__board__row__item" v-for="item in items" :key="item">
-          <img
-            v-if="item !== items[0]"
-            class="game__board__row__item__img"
-            src="../assets/Union.svg"
-            alt="union"
-          />
-          <div>
+      <h1 class="game__area__row__title">Completa la secuencia</h1>
 
-            <!-- res -->
+      <div class="game__area__row__container">
+        <div class="game__area__row__items" v-for="item in items" :key="item">
+          <div class="game__area__row__items__item">
+            <img
+              v-if="item !== items[0]"
+              class="game__area__row__items__img"
+              src="../assets/Union.svg"
+              alt="union"
+            />
             <div v-if="item != '?'">
               <span>{{ item }}</span>
             </div>
-            <!-- v-if index donde este ? -->
+
             <div v-if="item == '?'">
               <div
-                class="game__board__row__item__answer --correct"
+                class="game__area__row__items__answer --correct"
                 v-if="statusQuestion.status === 'correct'"
               >
                 <span>{{ answer }}</span>
-                <img src="../assets/Check.svg" alt="check">
+                <img src="../assets/Check.svg" alt="check" />
               </div>
 
               <div
-                class="game__board__row__item__answer --incorrect"
+                class="game__area__row__items__answer --incorrect"
                 v-if="statusQuestion.status === 'incorrect'"
               >
                 <span>{{ answer }}</span>
-                <span>{{statusQuestion.result}}</span>
+                <span>{{ statusQuestion.result }}</span>
               </div>
-            </div>
 
-            <div class="game__board__row__item__answer" v-if="item == '?' && statusQuestion.status == null">
-              <span>{{ answer }}</span>
+              <div
+                class="game__area__row__items__answer"
+                v-if="statusQuestion.status == null"
+              >
+                <span>{{ answer }}</span>
 
-              <div class="game__board__row__item__answer__buttons">
-                <div class="game__board__row__item__answer__buttons__button">
-                  <button
-                    class="game__board__row__item__answer__buttons__button__item"
-                    v-for="selection in selections"
-                    :key="selection.id"
-                    v-on:click="answer = selection"
-                  >
-                    {{ selection }}
-                  </button>
+                <div class="game__area__row__items__answer__buttons">
+                  <div class="game__area__row__items__answer__buttons__button">
+                    <button
+                      class="game__area__row__items__answer__buttons__button__item"
+                      v-for="selection in selections"
+                      :key="selection.id"
+                      v-on:click="answer = selection"
+                    >
+                      {{ selection }}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -76,7 +80,7 @@ export default {
   data() {
     return {
       round: 1,
-      answer: "",
+      answer: null,
 
       items: [],
       correctAnswer: [],
@@ -85,6 +89,8 @@ export default {
       index: 0,
       score: 0,
       gameType: null, //pend
+
+      timerStatus: false,
 
       resultQuestion: [],
     };
@@ -112,6 +118,7 @@ export default {
 
   async created() {
     await this.generateItems();
+    this.timerStatus = true;
   },
 
   methods: {
@@ -120,9 +127,9 @@ export default {
       /* hacer hasta que round sea igual a 5 */
       if (this.round < 5) {
         this.round++;
-        this.answer = "";
-        //this.statusQuestion = null;
+        this.answer = null;
         this.generateItems();
+        this.timerStatus = true;
       } else {
         this.$store.commit("EndGame", true);
         this.$store.commit("Score", this.score);
@@ -133,11 +140,29 @@ export default {
     },
 
     async generateItems() {
-      /* genera un numero randon entre 1 y 3 */
+
+/*       if(this.gameType == 3){
+        let random = Math.floor(Math.random() * 92) + 1;
+        const primeNumbers = _.filter(_.range(random, random + 7), (num) => {
+        for (let i = 2; i < num; i++) {
+          if (num % i === 0) {
+            return false;
+          }
+        }
+        return num !== 1;
+      });
+      } */
+
+
+
       let random = Math.floor(Math.random() * 3) + 1;
 
       /* genera un array con el numero random de items */
       const items = _.sortBy(_.range(random, random + 7));
+
+
+      
+      
 
       this.correctAnswer = Object.assign([], items);
       console.log("correctAnswer", this.correctAnswer);
@@ -169,19 +194,13 @@ export default {
     },
 
     checkAnswer() {
-      console.log("checkAnswer");
-      /* remplazar valor ? de items por answer */
-
+      this.timerStatus = false;
       let newArray = Object.assign([], this.items);
       console.log("newArray", newArray);
       const index = newArray.indexOf("?");
       console.log("index newArray", index);
       newArray[index] = parseInt(this.answer);
       console.log("newArray2", newArray);
-
-      //const index = this.items.indexOf("?");
-      //this.items[index] = parseInt(this.answer);
-
       console.log(this.items, "items");
       console.log(newArray, "newArray");
       console.log(this.correctAnswer, "correctAnswer");
@@ -195,9 +214,7 @@ export default {
         console.log("correct");
       } else {
         result = {
-          result:
-            "La respuesta correcta es " +
-            this.correctAnswer[this.index],
+          result: "La respuesta correcta es " + this.correctAnswer[this.index],
           status: "incorrect",
         };
         console.log("incorrect");
@@ -205,19 +222,15 @@ export default {
       this.$emit("sendCheckAnswerBreak", false);
       return (this.resultQuestion = result);
     },
-
-    /* se acabo el tiempo, respuesta incorrecta */
-    /* timeOut() {
-      return (this.resultQuestion =
-        "El tiempo se acabo, la respuesta correcta es: " +
-        this.correctAnswer[this.index]);
-    }, */
   },
 };
 </script>
 
 <style scoped>
-.game__board {
+.timeBar {
+  width: 100%;
+}
+.game__area {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -227,7 +240,7 @@ export default {
   padding: 0 1rem;
 }
 
-.game__board__row {
+.game__area__row {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -237,7 +250,7 @@ export default {
   padding: 0 1rem;
 }
 
-.game__board__row__title {
+.game__area__row__title {
   font-size: 3.6rem;
   font-weight: var(--font-weight);
   color: var(--color-black);
@@ -245,33 +258,44 @@ export default {
   margin-bottom: 1rem;
 }
 
-.game__board__row__form {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+.game__area__row__container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  max-width: 1200px;
   height: 100%;
   padding: 0 1rem;
+  margin-left: -100px;
 }
 
-.game__board__row__item {
+.game__area__row__items {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-
   font-size: 9.6rem;
   font-weight: var(--font-weight);
-  color: var(--color-black);
+  color: var(--color-steelblue);
   text-align: center;
 }
 
-.game__board__row__item__img {
-  padding: 3rem;
+.game__area__row__items__item {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-.game__board__row__item__answer {
+.game__area__row__items:nth-child(1) {
+  padding-left: 100px;
+}
+
+.game__area__row__items__img {
+  display: flex;
+  height: 100%;
+  padding: 0 30px;
+}
+
+.game__area__row__items__answer {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -284,28 +308,28 @@ export default {
   border-radius: 20px;
   font-size: 9.6rem;
   font-weight: var(--font-weight);
-  color: var(--color-black);
+  color: var(--color-steelblue);
   text-align: center;
 }
 
-/* si .game__board__row__item__answer es correcta  */
-.game__board__row__item__answer.--correct {
+/* si .game__area__row__items__answer es correcta  */
+.game__area__row__items__answer.--correct {
   border: 0.3rem solid var(--color-turquoise);
   box-shadow: 0px 30px 30px rgba(0, 234, 194, 0.3);
 }
 
-.game__board__row__item__answer.--correct img {
+.game__area__row__items__answer.--correct img {
   position: absolute;
   padding-top: 25rem;
 }
 
-/* si .game__board__row__item__answer es incorrecta  */
-.game__board__row__item__answer.--incorrect {
+/* si .game__area__row__items__answer es incorrecta  */
+.game__area__row__items__answer.--incorrect {
   border: 0.3rem solid var(--color-lightCoral);
-  box-shadow: 0px 28.6166px 28.6166px rgba(255, 124, 128, 0.3);
+  box-shadow: 0px 30px 30px rgba(255, 124, 128, 0.3);
 }
 
-.game__board__row__item__answer.--incorrect  span:nth-child(2) {
+.game__area__row__items__answer.--incorrect span:nth-child(2) {
   position: absolute;
   max-width: 16.8rem;
   padding-top: 25rem;
@@ -314,14 +338,12 @@ export default {
   color: var(--color-fireBrick);
 }
 
-
-
-.game__board__row__item__answer__buttons {
+.game__area__row__items__answer__buttons {
   position: absolute;
   z-index: 1;
 }
 
-.game__board__row__item__answer__buttons__button {
+.game__area__row__items__answer__buttons__button {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -333,8 +355,7 @@ export default {
   box-shadow: 0px 9.7335px 9.7335px #b4d8f4;
 }
 
-.game__board__row__item__answer__buttons__button__item {
-  /* tamaño cuadrado */
+.game__area__row__items__answer__buttons__button__item {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -345,11 +366,180 @@ export default {
   border-radius: 0.436rem;
   font-size: 3.2rem;
   font-weight: var(--font-weight);
-  color: var(--color-black);
+  color: var(--color-steelblue);
 }
 
-.game__board__row__item__answer__buttons__button__item:hover {
+.game__area__row__items__answer__buttons__button__item:hover {
   transform: scale(1.1);
   cursor: pointer;
+}
+
+/* breakpoint pantalla menor de 1250px */
+@media (max-width: 1250px) {
+  .game__area__row__items {
+    font-size: 6.2rem;
+  }
+
+  .game__area__row__container {
+    max-width: 950px;
+    margin-left: -50px;
+  }
+
+  .game__area__row__items__answer {
+    font-size: 6.2rem;
+  }
+
+  .game__area__row__items__answer.--correct {
+    box-shadow: 0px 20px 20px rgba(0, 234, 194, 0.3);
+  }
+
+  .game__area__row__items__answer.--correct img {
+    position: absolute;
+    padding-top: 22rem;
+  }
+
+  .game__area__row__items__answer.--incorrect {
+    box-shadow: 0px 20px 20px rgba(255, 124, 128, 0.3);
+  }
+
+  .game__area__row__items__answer.--incorrect span:nth-child(2) {
+    position: absolute;
+    max-width: 16.8rem;
+    padding-top: 20rem;
+    font-size: 2.4rem;
+  }
+
+  .game__area__row__items:nth-child(1) {
+    padding-left: 50px;
+  }
+
+  .game__area__row__items__img {
+    padding: 0 15px;
+  }
+}
+
+/* breakpoint pantalla menor de 850px */
+@media (max-width: 850px) {
+  .game__area__row__items {
+    font-size: 3.8rem;
+  }
+
+  .game__area__row__items:nth-child(1) {
+    padding-left: 0px;
+  }
+
+  .game__area__row__container {
+    max-width: 550px;
+    margin-left: -40px;
+  }
+
+  .game__area__row__items__answer {
+    width: 8.5rem;
+    height: 8.5rem;
+    background: var(--color-white);
+    box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    font-size: 3.8rem;
+  }
+
+  .game__area__row__items__answer.--correct {
+    box-shadow: 0px 15px 15px rgba(0, 234, 194, 0.3);
+  }
+
+  .game__area__row__items__answer.--correct img {
+    position: absolute;
+    padding-top: 18rem;
+  }
+
+  .game__area__row__items__answer.--incorrect {
+    box-shadow: 0px 15px 15px rgba(255, 124, 128, 0.3);
+  }
+
+  .game__area__row__items__answer.--incorrect span:nth-child(2) {
+    position: absolute;
+    max-width: 16.8rem;
+    padding-top: 16rem;
+    font-size: 2.4rem;
+  }
+
+  .game__area__row__items__img {
+    padding: 0 10px;
+  }
+}
+
+/* breakpoint pantalla menor de 650px */
+@media (max-width: 650px) {
+  .game__area__row__items {
+    font-size: 3rem;
+  }
+
+  .game__area__row__items img {
+    width: 3rem;
+  }
+
+  .game__area__row__container {
+    max-width: 300px;
+    margin-left: -40px;
+  }
+
+  .game__area__row__items__answer {
+    width: 4.5rem;
+    height: 4.5rem;
+    background: var(--color-white);
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    font-size: 2.8rem;
+  }
+
+  .game__area__row__items__answer.--correct {
+    box-shadow: 0px 10px 10px rgba(0, 234, 194, 0.3);
+  }
+
+  .game__area__row__items__answer.--correct img {
+    position: absolute;
+    padding-top: 14rem;
+  }
+
+  .game__area__row__items__answer.--incorrect {
+    box-shadow: 0px 10px 10px rgba(255, 124, 128, 0.3);
+  }
+
+  .game__area__row__items__answer.--incorrect span:nth-child(2) {
+    position: absolute;
+    max-width: 16.8rem;
+    padding-top: 12rem;
+    font-size: 1.6rem;
+  }
+  .game__area__row__items__img {
+    padding: 0 5px;
+  }
+
+  .game__area__row__items__answer__buttons__button {
+  margin-top: 8rem;
+  gap: 0.5rem;
+  background-color: var(--color-lightsteel-blue);
+  border: 0.5rem solid var(--color-lightsteel-blue);
+  border-radius: 0.97rem;
+  box-shadow: 0px 7.7335px 7.7335px #b4d8f4;
+}
+
+.game__area__row__items__answer__buttons__button__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 1.2rem;
+  border: 1px solid var(--color-lightsteel-blue);
+  border-radius: 0.436rem;
+  font-size: 3rem;
+  font-weight: var(--font-weight);
+  color: var(--color-steelblue);
+}
+
+.game__area__row__items__answer__buttons__button__item:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
 }
 </style>

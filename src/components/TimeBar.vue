@@ -17,34 +17,49 @@ export default {
   name: "TimeBar",
   data() {
     return {
+      TimerStatus: false,
       Progress: 0,
-      Time: 0,
+      SetTimeOut: 0,
+      interval: null,
     };
   },
 
-  props: ["setTimeOut"],
+  props: ["setTimeOut", "timerStatus"],
 
   created() {
-    this.Time = this.setTimeOut;
+    this.SetTimeOut = this.setTimeOut;
   },
 
-  watch: {},
+  watch: {
+    setTimeOut: function (val) {
+      this.SetTimeOut = val;
+    },
+
+    timerStatus: function (val) {
+      if (val) {
+        this.start();
+      } else {
+        this.stop();
+      }
+    },
+  },
 
   methods: {
     start() {
-      this.Progress = 0;
-      this.Time = this.setTimeOut;
-      this.timer = setInterval(() => {
-        this.Progress += 100 / this.Time;
-        this.Time--;
-        if (this.Time < 0) {
-          clearInterval(this.timer);
-          this.$emit("timeOut");
+      console.log("start");
+      this.interval = setInterval(() => {
+        this.Progress += 0.1;
+        if (this.Progress >= 100 || this.TimerStatus != false) {
+          console.log("time out");
+          this.$emit("setTimeOutBreak", true);
+          clearInterval(this.interval);
         }
-      }, 1000);
+      }, 0);
     },
+
     stop() {
-      clearInterval(this.timer);
+      this.Progress = 0;
+      clearInterval(this.interval);
     },
   },
 };
@@ -52,18 +67,13 @@ export default {
 <style scoped>
 .progress {
   width: 100%;
-  height: 20px;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  margin: 10px 0;
+  height: 2rem;
+  margin-bottom: 3rem;
 }
 
 .progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #ff8001 0%, #ffcc0d 100%);
-  border-radius: 5px;
-  text-align: center;
-  line-height: 20px;
-  color: white;
+  border-radius: 0px 100px 100px 0px;
 }
 </style>

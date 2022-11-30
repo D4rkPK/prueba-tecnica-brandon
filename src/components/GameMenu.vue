@@ -1,20 +1,35 @@
-<!-- gameMenu view, mostrar resultados -->
+<!-- game__menu view, mostrar resultados -->
 <template>
-  <div class="gameMenu">
-    <h1 class="gameMenu__title">Completa la secuencia</h1>
-    <h3 class="gameMenu__subtitle">
-      ¿Estás listo para encontrar los números que faltan en las siguientes secuencias?
-    </h3>
-    <!-- boton continuar push / -->
-    <button class="gameMenu__button" v-on:click="goGame()">
-      <span>Empezar</span>
-    </button>
+  <div class="game__menu">
+    <div class="game__menu__items">
+      <div class="game__menu__items__item">
+        <h1 class="title">Completa la secuencia🚀</h1>
+      </div>
+
+      <div class="game__menu__items__item">
+        <h3 class="subtitle">
+          ¿Estás listo para encontrar los números que faltan en las siguientes
+          secuencias?
+        </h3>
+      </div>
+
+      <div class="game__menu__items__item">
+        <div @click="goGame()">
+          <PrimaryButton :name="'Continuar'" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import PrimaryButton from "@/components/UI components/PrimaryButton.vue";
+
 export default {
-  name: "GameMenu",
+  name: "gameMenu",
+  components: {
+    PrimaryButton,
+  },
   data() {
     return {};
   },
@@ -28,42 +43,31 @@ export default {
 </script>
 
 <style scoped>
-.gameMenu {
+.game__menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--background-color);
+}
+
+.game__menu__items {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  height: 100%;
+  align-items: center;
   width: 100%;
-  background-color: #fff;
+  height: 100%;
 }
 
-.gameMenu__title {
-  font-size: 9.6rem;
-  font-weight: 700;
-  color: var(--color-black);
+.game__menu__items__item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
-.gameMenu__subtitle {
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--color-steel);
-  letter-spacing: 0.03em;
-}
-
-.gameMenu__button {
-  width: 25.5rem;
-  height: 7.6rem;
-  border-radius: 40rem;
-  background-color: var(--color-azure);
-  border: none;
-}
-
-.gameMenu__button span {
-  font-size: 2.4rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-white);
-}
 </style>

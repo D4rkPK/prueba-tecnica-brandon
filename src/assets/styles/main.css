@@ -1,0 +1,25 @@
+@import "./base.css";
+.subtitle {
+  font-size: 3rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-steel);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.title {
+  font-size: 9.6rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  text-align: center;
+}
+
+@media screen and (max-width: 1250px) {
+  .title {
+    font-size: 5rem;
+  }
+
+  .subtitle {
+    font-size: 2rem;
+  }
+}

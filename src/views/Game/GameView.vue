@@ -1,49 +1,43 @@
 <template>
   <div class="game">
     <div class="game__items">
-      <GameLogic
+      <GameArea
         v-if="!this.$store.state.endGame"
         :sendCheckAnswer="CheckAnswer"
         @sendCheckAnswerBreak="CheckAnswerBreak"
         :sendNextQuestion="NextQuestion"
         @sendNextQuestionBreak="NextQuestionBreak"
       />
-      <EndGame v-if="this.$store.state.endGame" />
-    </div>
+      <GameOver v-if="this.$store.state.endGame" />
 
-    <div
-      v-if="!this.$store.state.endGame"
-      class="game__controls"
-      style="margin-top: 20rem"
-    >
-      <button
-        v-if="!answered"
-        class="game__controls__button --answer"
-        v-on:click="CheckAnswer = true"
-      >
-        <span>Responder</span>
-      </button>
-      <!-- button siguiente -->
-      <button
-        v-else
-        class="game__controls__button --next"
-        v-on:click="NextQuestion = true"
-      >
-        <span>Continuar</span>
-      </button>
+      <div v-if="!this.$store.state.endGame" class="game__controls">
+        <button
+          v-if="!answered"
+          class="game__controls__button"
+          v-on:click="CheckAnswer = true"
+        >
+          <span>Responder</span>
+        </button>
+
+        <div v-else class="game__controls__button__next">
+          <SecondaryButton @click="NextQuestion = true" :name="'Continuar'" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import GameLogic from "@/components/GameArea.vue";
-import EndGame from "@/components/GameOver.vue";
+import GameArea from "@/components/GameArea.vue";
+import GameOver from "@/components/GameOver.vue";
+import SecondaryButton from "@/components/UI components/SecondaryButton.vue";
 
 export default {
   name: "GameView",
   components: {
-    GameLogic,
-    EndGame,
+    GameArea,
+    GameOver,
+    SecondaryButton,
   },
   data() {
     return {
@@ -84,7 +78,6 @@ export default {
 
 <style scoped>
 .game {
-  /* margin 10% de la pantalla arriba y abajo */
   padding: 15vh 0;
   display: flex;
   flex-direction: column;
@@ -92,7 +85,6 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: var(--color-white);
 }
 
 .game__items {
@@ -102,13 +94,15 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
+  background: var(--background-color);
 }
 
 .game__controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
 .game__controls__button {
@@ -126,10 +120,6 @@ export default {
   transition: all 0.3s ease;
 }
 
-.game__controls__button.--next {
-  background-color: var(--color-azure);
-}
-
 .game__controls__button span {
   font-size: 1.8rem;
   font-weight: 700;
@@ -138,6 +128,22 @@ export default {
   color: var(--color-white);
 }
 .game__controls__button:hover {
-  background-color: var(--color-grey-dark);
+  background-color: var(--color-azure);
+  transform: scale(1.05);
+}
+
+.game__controls__button__next {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  width: 100%;
+  padding-right: 50px;
+}
+
+/* breakpoint pantalla menor de 650px */
+@media (max-width: 650px) {
+  .game__controls__button__next {
+    padding-right: 20px;
+  }
 }
 </style>

@@ -1,42 +1,36 @@
 <!-- endGame view, mostrar resultados -->
 <template>
-  <div class="endGame">
-    <img src="../assets/Check.svg" alt="check" />
-    <h3 class="endGame__title">DESEMPEÑO</h3>
-    <h1 class="endGame__subtitle">{{ resultado }}%</h1>
-    <!-- boton continuar push / -->
-    <div class="wrapper">
-      <button class="endGame__button" v-on:click="goHome()">
-        <span>Continuar</span>
-      </button>
-    </div>
+  <div class="game__over">
+    <div class="game__over__items">
+      <div class="game__over__items__item">
+        <img src="../assets/Check.svg" alt="check" />
+      </div>
 
-    <svg
-      style="visibility: hidden; position: absolute"
-      width="0"
-      height="0"
-      xmlns="http://www.w3.org/2000/svg"
-      version="1.1"
-    >
-      <defs>
-        <filter id="goo">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-          <feColorMatrix
-            in="blur"
-            mode="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
-            result="goo"
-          />
-          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-        </filter>
-      </defs>
-    </svg>
+      <div class="game__over__items__item">
+        <h3 class="subtitle">DESEMPEÑO</h3>
+      </div>
+
+      <div class="game__over__items__item">
+        <h1 class="title">{{ resultado }}%</h1>
+      </div>
+
+      <div class="game__over__items__item">
+        <div @click="goHome()">
+          <PrimaryButton :name="'Continuar'" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import PrimaryButton from "@/components/UI components/PrimaryButton.vue";
+
 export default {
-  name: "EndGame",
+  name: "gameOver",
+  components: {
+    PrimaryButton,
+  },
   data() {
     return {};
   },
@@ -50,6 +44,7 @@ export default {
 
   methods: {
     goHome() {
+      console.log("go home");
       this.$store.commit("EndGame", false);
       this.$router.push("/");
     },
@@ -58,81 +53,33 @@ export default {
 </script>
 
 <style scoped>
-.endGame {
+.game__over {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin: 15vh 0;
+}
+
+.game__over__items {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  height: 100%;
+  align-items: center;
   width: 100%;
+  height: 100%;
+  padding: 5vh 0;
 }
 
-.endGame__title {
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--color-steel);
-  letter-spacing: 0.03em;
+.game__over__items__item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin: 15px 0;
 }
-
-.endGame__subtitle {
-  font-size: 9.6rem;
-  font-weight: 700;
-  color: var(--color-black);
-}
-
-.wrapper {
-  padding: 1.5rem 0;
-  filter: url("#goo");
-}
-
-.endGame__button {
-  width: 25.5rem;
-  height: 7.6rem;
-  border-radius: 40rem;
-  background-color: var(--color-azure);
-  border: none;
-}
-
-.endGame__button:before,
-.endGame__button:after {
-  width: 7.04em;
-  height: 4.72em;
-  position: absolute;
-  content: "";
-  display: inline-block;
-  background: var(--color-azure);
-  border-radius: 50%;
-  transition: transform 1s ease;
-  transform: scale(0);
-  z-index: -1;
-}
-
-.endGame__button:hover {
-  cursor: pointer;
-}
-.endGame__button:before {
-  top: -5%;
-  left: 25%;
-}
-.endGame__button:after {
-  bottom: -5%;
-  right: 25%;
-}
-.endGame__button:hover:before,
-.endGame__button:hover:after {
-  transform: none;
-}
-
-.endGame__button span {
-  font-size: 2.4rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-white);
-}
-
-
-/* Animation Result */
-
 
 </style>

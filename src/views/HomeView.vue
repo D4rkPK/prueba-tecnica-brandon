@@ -18,10 +18,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .home {
-  /* margin 10% de la pantalla arriba y abajo */
-  padding: 10vh 0;
+  padding: 15vh 0;
   display: flex;
   flex-direction: column;
   align-items: center;
