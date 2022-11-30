@@ -15,13 +15,6 @@ export default {
   components: {
     GameMenu,
   },
-  methods: {
-
-    reload() {
-      /* push home */
-      this.$router.push("/s");
-    },
-  },
 };
 </script>
 
