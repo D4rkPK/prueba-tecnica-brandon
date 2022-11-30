@@ -30,7 +30,7 @@
 <script>
 import GameArea from "@/components/GameArea.vue";
 import GameOver from "@/components/GameOver.vue";
-import SecondaryButton from "@/components/UI components/SecondaryButton.vue";
+import SecondaryButton from "@/components/UI_components/SecondaryButton.vue";
 
 export default {
   name: "GameView",
@@ -134,8 +134,8 @@ export default {
 
 .game__controls__button__next {
   display: flex;
-  justify-content: end;
-  align-items: end;
+  justify-content: flex-end;
+  align-items: flex-end;
   width: 100%;
   padding-right: 50px;
 }

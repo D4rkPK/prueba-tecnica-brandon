@@ -10,8 +10,15 @@ const routes = [
   {
     path: '/game',
     name: 'game',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Game/GameView.vue')
+    component: () => import('../views/Game/GameView.vue')
   },
+
+  /* 404 */
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('../views/errors/NotFoundView.vue')
+  }
 ]
 
 const router = createRouter({

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import PrimaryButton from "@/components/UI components/PrimaryButton.vue";
+import PrimaryButton from "@/components/UI_components/PrimaryButton.vue";
 
 export default {
   name: "gameOver",
