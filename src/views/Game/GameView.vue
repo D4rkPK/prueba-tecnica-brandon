@@ -49,7 +49,7 @@ export default {
       answered: false,
 
       round: 1,
-      answer: "_",
+      answer: "",
       items: [],
       correctAnswer: [],
       selections: [],

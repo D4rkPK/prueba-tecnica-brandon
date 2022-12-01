@@ -49,6 +49,18 @@
           </div>
         </div>
         <p class="paragraph">{{ difficulty_description }}</p>
+        <div class="instructions">
+          <span>Instrucciones</span>
+          <p class="paragraph" v-if="(difficulty == 1)">
+            Deberás encontrar el número faltante en una secuencia de números
+            naturales.
+          </p>
+          <p class="paragraph" v-if="(difficulty == 2)">Un poco más de dificultad al ejercicio fácil</p>
+          <p class="paragraph" v-if="(difficulty == 3)">
+            Deberas encontrar el número faltante en una secuencia de números
+            primos.
+          </p>
+        </div>
       </div>
 
       <div class="game__menu__items__item">
@@ -131,12 +143,40 @@ export default {
   height: 100%;
 }
 
+.instructions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-azure);
+  border-radius: 20px;
+  box-shadow: 0px 20px 20px rgba(255, 124, 128, 0.3);
+  margin-top: 15px;
+  padding: 20px;
+  width: 100%;
+  min-height: 140px;
+}
+
+.instructions span {
+  font-size: 2.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-white);
+  margin-bottom: 1rem;
+}
+
+.instructions p {
+  font-size: 1.8rem;
+  color: var(--color-white);
+}
+
 .difficult {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 40%;
+  width: 80%;
+  max-width: 500px;
   color: var(--color-black);
   padding-bottom: 10%;
 }
