@@ -95,6 +95,7 @@ export default {
     };
   },
   props: ["sendCheckAnswer", "sendNextQuestion"],
+  emits: ["sendCheckAnswerBreak", "sendNextQuestionBreak"],
 
   computed: {
     statusQuestion() {
@@ -116,9 +117,6 @@ export default {
   },
 
   async created() {
-    console.log("created", this.$store.state.difficulty);
-    /* log emit difficulty */
-    console.log(this.$emit('difficulty'), "emit difficulty");
     await this.generateItems(this.$store.state.difficulty);
     this.timerStatus = true;
   },
@@ -280,10 +278,9 @@ export default {
 .game__area__row__container {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  max-width: 1200px;
+  max-width: 1600px;
   height: 100%;
-  padding: 0 1rem;
-  margin-left: -100px;
+  padding: 0 100px;
 }
 
 .game__area__row__items {
@@ -400,8 +397,7 @@ export default {
   }
 
   .game__area__row__container {
-    max-width: 950px;
-    margin-left: -50px;
+    max-width: 1000px;
   }
 
   .game__area__row__items__answer {
@@ -448,8 +444,7 @@ export default {
   }
 
   .game__area__row__container {
-    max-width: 550px;
-    margin-left: -40px;
+    max-width: 800px;
   }
 
   .game__area__row__items__answer {
@@ -486,8 +481,8 @@ export default {
   }
 }
 
-/* breakpoint pantalla menor de 650px */
-@media (max-width: 650px) {
+/* breakpoint pantalla menor de 550px */
+@media (max-width: 550px) {
 
   .game__area__row {
     display: flex;
@@ -497,27 +492,25 @@ export default {
     
   }
   .game__area__row__items {
-    font-size: 3rem;
+    font-size: 2.2rem;
   }
 
   .game__area__row__items img {
-    width: 3rem;
+    width: 2.4rem;
   }
 
-
   .game__area__row__container {
-    grid-template-columns: repeat(7, 1fr);
-    width: 270px;
-    margin-left: -40px;
+    max-width: 350px;
+    padding: 0 10px;
   }
 
   .game__area__row__items__answer {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
     background: var(--color-white);
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.05);
     border-radius: 10px;
-    font-size: 2.8rem;
+    font-size: 2.2rem;
   }
 
   .game__area__row__items__answer.--correct {
@@ -537,17 +530,16 @@ export default {
     position: absolute;
     max-width: 16.8rem;
     padding-top: 12rem;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
   .game__area__row__items__img {
     padding: 0 5px;
   }
 
   .game__area__row__items__answer__buttons__button {
-    margin-top: 8rem;
-    gap: 0.5rem;
-    background-color: var(--color-lightsteel-blue);
-    border: 0.5rem solid var(--color-lightsteel-blue);
+    margin-top: 6rem;
+    gap: 0.3rem;
+    border: 0.3rem solid var(--color-lightsteel-blue);
     border-radius: 0.97rem;
     box-shadow: 0px 7.7335px 7.7335px #b4d8f4;
   }
@@ -556,12 +548,12 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    padding: 1.2rem;
+    width: 3rem;
+    height: 3rem;
+    padding: 0.8rem;
     border: 1px solid var(--color-lightsteel-blue);
     border-radius: 0.436rem;
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: var(--font-weight);
     color: var(--color-steelblue);
   }

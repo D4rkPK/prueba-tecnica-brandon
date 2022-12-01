@@ -77,17 +77,12 @@ export default {
 
   created() {
     this.$store.commit("Difficulty", this.difficulty);
-    this.$emit("difficulty", this.difficulty);
-
-    console.log(this.$emit("difficulty"));
   },
 
   watch: {
     difficulty() {
       console.log(this.difficulty, "difficulty");
       this.$store.commit("Difficulty", this.difficulty);
-      /* emit */
-      this.$emit("difficulty", this.difficulty);
 
       console.log("difficulty changed", this.$store.state.difficulty);
       if (this.difficulty == 1) {
